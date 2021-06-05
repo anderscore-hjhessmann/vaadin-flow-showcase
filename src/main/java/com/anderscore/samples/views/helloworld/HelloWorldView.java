@@ -26,7 +26,7 @@ public class HelloWorldView extends HorizontalLayout {
         add(name, sayHello, fancyButton);
         setVerticalComponentAlignment(Alignment.END, name, sayHello);
         sayHello.addClickListener(e -> {
-            Notification.show("Hello " + name.getValue());
+            Notification.show(getTranslation("hello", name.getValue()));
         });
         fancyButton.addClickListener(ev -> {
             Notification.show("That's fancy!");
