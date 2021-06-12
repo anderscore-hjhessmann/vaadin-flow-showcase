@@ -25,7 +25,11 @@ import com.vaadin.flow.component.page.Push;
 public class Application extends SpringBootServletInitializer implements AppShellConfigurator {
 
     public static void main(String[] args) {
-        LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
+        if (false) {
+            LaunchUtil.launchBrowserInDevelopmentMode(SpringApplication.run(Application.class, args));
+        } else {
+            SpringApplication.run(Application.class, args);
+        }
     }
 
 }

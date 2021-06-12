@@ -2,6 +2,7 @@ package com.anderscore.samples.views.main;
 
 import com.anderscore.samples.views.about.AboutView;
 import com.anderscore.samples.views.addressform.AddressFormView;
+import com.anderscore.samples.views.textfields.TextFieldsView;
 import com.anderscore.samples.views.customcomponet.CustomComponentsView;
 import com.anderscore.samples.views.fancy.FancyView;
 import com.anderscore.samples.views.helloworld.HelloWorldView;
@@ -87,6 +88,7 @@ public class MainView extends AppLayout {
                 createTab("Address Form", AddressFormView.class),
                 createTab("Map", MapView.class),
                 createTab("Custom components", CustomComponentsView.class),
+                createTab("Text Fields", TextFieldsView.class),
                 createTab("Fancy View", FancyView.class),
                 createTab("About", AboutView.class)};
     }
