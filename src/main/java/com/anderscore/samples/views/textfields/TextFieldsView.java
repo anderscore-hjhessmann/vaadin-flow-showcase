@@ -1,9 +1,11 @@
 package com.anderscore.samples.views.textfields;
 
 import com.anderscore.samples.views.main.MainView;
+import com.vaadin.flow.component.AbstractField;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.checkbox.Checkbox;
+import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.orderedlayout.FlexLayout;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -12,6 +14,7 @@ import com.vaadin.flow.component.textfield.Autocomplete;
 import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.*;
+import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
@@ -21,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.invoke.MethodHandles;
+import java.util.EventObject;
 
 @Route(value = "textfields/:name?", layout = MainView.class)
 @PageTitle("Text Fields")
@@ -40,6 +44,7 @@ public class TextFieldsView extends FlexLayout implements BeforeEnterObserver {
                 .asRequired("must not be empty")
                 .bind(SampleModel::getName, SampleModel::setName);
         layout.add(textField);
+        addListener(textField);
 
         Binder<TextField> textFieldBinder = new Binder<>(TextField.class);
 
@@ -76,6 +81,16 @@ public class TextFieldsView extends FlexLayout implements BeforeEnterObserver {
                 .bind(TextField::getPattern, TextField::setPattern);
         layout.add(new HorizontalLayout(minLengthField, maxLengthField, patternField));
 
+        ComboBox<ValueChangeMode> valueChangeModeComboBox = new ComboBox<>("ValueChangeMode");
+        valueChangeModeComboBox.setItems(ValueChangeMode.values());
+        textFieldBinder.forField(valueChangeModeComboBox)
+                .bind(TextField::getValueChangeMode, TextField::setValueChangeMode);
+        IntegerField valueChangeTimeoutField = new IntegerField("ValueChangeTimeout");
+        textFieldBinder.forField(valueChangeTimeoutField)
+                .asRequired()
+                .bind(TextField::getValueChangeTimeout, TextField::setValueChangeTimeout);
+        layout.add(new HorizontalLayout(valueChangeModeComboBox, valueChangeTimeoutField));
+
         HorizontalLayout checkboxLayout = new HorizontalLayout();
         for (String property : "autofocus,autoselect,clearButtonVisible,preventInvalidInput".split(",")) {
             Checkbox checkbox = new Checkbox(StringUtils.capitalize(property));
@@ -104,6 +119,23 @@ public class TextFieldsView extends FlexLayout implements BeforeEnterObserver {
 
         textFieldBinder.readBean(textField);
         return layout;
+    }
+
+    private void addListener(TextField textField) {
+        textField.addValueChangeListener(this::logEvent);
+        textField.addInputListener(this::logEvent);
+        if (false) {
+            textField.addKeyDownListener(this::logEvent);
+            textField.addKeyPressListener(this::logEvent);
+            textField.addKeyUpListener(this::logEvent);
+        }
+        textField.addCompositionEndListener(this::logEvent);
+        textField.addCompositionStartListener(this::logEvent);
+        textField.addCompositionUpdateListener(this::logEvent);
+    }
+
+    private void logEvent(EventObject event) {
+        log.info("caught: {}", event);
     }
 
     private void validate(ClickEvent<Button> buttonClickEvent) {
