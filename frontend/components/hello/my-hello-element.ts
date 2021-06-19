@@ -1,14 +1,14 @@
-import {html, LitElement} from "lit-element";
+import {customElement, html, LitElement, property} from "lit-element";
 
+@customElement("my-hello-element")
 class MyHelloElement extends LitElement {
 
-    greet : string | undefined;
+    @property()
+    greet = "World"
 
     render() {
         return html`
-            <h3>Hello ${this.greet}</h3>
+            <h3>Hello ${this.greet}!</h3>
         `;
     }
 }
-
-window.customElements.define('my-hello-element', MyHelloElement);
