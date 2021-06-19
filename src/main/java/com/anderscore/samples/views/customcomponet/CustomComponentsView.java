@@ -46,6 +46,8 @@ public class CustomComponentsView extends VerticalLayout implements AfterNavigat
         syncButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         add(syncButton);
         syncButton.addClickListener(ev -> binder.readBean(customModel));
+
+        add(new MyHello("Brrr"));
     }
 
     @Override
